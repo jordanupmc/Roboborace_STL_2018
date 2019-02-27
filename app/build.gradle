@@ -1,0 +1,74 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '26.0.2'
+    defaultConfig {
+        applicationId "robobo.example.com.roboboexample"
+        minSdkVersion 22
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    packagingOptions {
+        exclude 'lib/arm64-v8a/libopencv_java3.so'
+        exclude 'lib/arm64-v8a/libpocketsphinx_jni.so'
+        exclude 'lib/x86/*.so'
+        exclude 'lib/x86_64/*.so'
+        exclude 'lib/armeabi/*.so'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.+'
+    testCompile 'junit:junit:4.12'
+
+//THIRD-PARTY LIBRARIES
+    compile 'com.mytechia:opencv:3.1.0.4-my'
+    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support:design:25.4.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+
+    compile 'com.mytechia:mytechia-commons-di:1.3.1'
+
+    //ROBOBO LIBRARIES
+    compile('com.mytechia:robobo-framework:1.3.3') {
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+        //changing true
+    }
+    compile ('com.mytechia:robobo-rob:1.1.2') {
+        //changing true
+    }
+    compile 'com.mytechia:robobo-sensing:1.0.1'
+    compile 'com.mytechia:robobo-sound:1.0.3'
+    compile 'com.mytechia:robobo-touch:1.0.0'
+    compile ('com.mytechia:robobo-speech:1.0.0'){
+        //changing true
+    }
+    compile('com.mytechia:robobo-emotion:1.0.1'){
+        changing true
+    }
+    compile 'com.mytechia:robobo-remote-control:1.0.1'
+    compile ('com.mytechia:robobo-vision:1.0.2'){
+        //changing true
+    }
+    compile 'com.mytechia:robobo-behaviours:1.0.4'
+
+
+}
