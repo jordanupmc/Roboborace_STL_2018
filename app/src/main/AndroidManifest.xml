@@ -1,0 +1,51 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
+    package="robobo.example.com.roboboexample">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <activity android:name="com.mytechia.robobo.app.setup.main.StartupActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.mytechia.robobo.app.setup.main.options.AOptionsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
+
+        <meta-data
+            android:name="optionsManager"
+            android:value="com.mytechia.robobo.app.setup.main.options.OptionsManager" />
+
+        <meta-data
+            android:name="optionsActivity"
+            android:value="com.mytechia.robobo.app.setup.main.options.AOptionsActivity" />
+
+        <meta-data
+            android:name="mainActivity"
+            android:value="com.mytechia.robobo.app.setup.main.emotions.unity.UnityPlayerActivity" />
+
+    </application>
+
+</manifest>
