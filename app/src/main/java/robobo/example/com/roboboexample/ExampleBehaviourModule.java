@@ -21,9 +21,10 @@
  ******************************************************************************/
 package robobo.example.com.roboboexample;
 
+import android.util.Log;
+
 import com.mytechia.commons.framework.exception.InternalErrorException;
-import com.mytechia.robobo.framework.IModule;
-import com.mytechia.robobo.framework.RoboboManager;
+import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 import com.mytechia.robobo.framework.behaviour.ABehaviourModule;
 import com.mytechia.robobo.framework.hri.emotion.Emotion;
 import com.mytechia.robobo.framework.hri.emotion.IEmotionModule;
@@ -32,26 +33,25 @@ import com.mytechia.robobo.framework.hri.speech.production.ISpeechProductionModu
 import com.mytechia.robobo.framework.hri.touch.ITouchListener;
 import com.mytechia.robobo.framework.hri.touch.ITouchModule;
 import com.mytechia.robobo.framework.hri.touch.TouchGestureDirection;
-import com.mytechia.robobo.rob.IRSensorStatus;
 import com.mytechia.robobo.rob.IRob;
 import com.mytechia.robobo.rob.IRobInterfaceModule;
 
-/** Example of custom Robobo behaviour written in java and using the native Robobo Framework
- *
+/**
+ * Example of custom Robobo behaviour written in java and using the native Robobo Framework
+ * <p>
  * This is just a simple example behaviour that subscribes a listener for touch events so that
  * it can react to taps and flings by changing the robot face and making some noises.
- *
+ * <p>
  * Furthermore a periodic behaviour is also programed in runStep() that makes the robot
  * react to obstacles by checking the value of the IR sensors and changing the face of the
  * robot when an obstacle is too close.
  *
  * @author Gervasio Varela | gervasio.varela@mytechia.com
- *
  */
 public class ExampleBehaviourModule extends ABehaviourModule {
 
     private IRob robModule = null;
-    private IEmotionModule  emotionModule = null;
+    private IEmotionModule emotionModule = null;
     private ITouchModule touchModule = null;
     private ISpeechProductionModule ttsModule = null;
     private IEmotionSoundModule soundModule = null;
@@ -61,7 +61,7 @@ public class ExampleBehaviourModule extends ABehaviourModule {
     private int count = 0;
 
     private int state = 0; //0 --> normal | 1 --> too close!
-
+    boolean finish = false;
 
     @Override
     protected void startBehaviour() throws InternalErrorException {
@@ -80,7 +80,6 @@ public class ExampleBehaviourModule extends ABehaviourModule {
         soundModule = getRobobo().getModuleInstance(IEmotionSoundModule.class);
 
 
-
         //startBehavour is the place to setup our modules and resources, like for example
         //suscribing some listeners to modules events
         //it's very important to perform only 'quick' operations in the listeners, if you need
@@ -90,26 +89,27 @@ public class ExampleBehaviourModule extends ABehaviourModule {
         //lets make the robot react to taps by temporarily changing its face and make some 'noise'
         touchListener = new ITouchListener() {
             @Override
-            public void tap(Integer x, Integer y) {
+            public void tap(final Integer x, final Integer y) {
                 //let's complain a little bit
                 soundModule.playSound(IEmotionSoundModule.OUCH_SOUND);
                 emotionModule.setTemporalEmotion(Emotion.ANGRY, 1500, Emotion.NORMAL);
-            }
-
-            @Override
-            public void touch(Integer x, Integer y) {
 
             }
 
             @Override
-            public void fling(TouchGestureDirection dir, double angle, long time, double distance) {
+            public void touch(final Integer x, final Integer y) {
+
+            }
+
+            @Override
+            public void fling(final TouchGestureDirection dir, final double angle, final long time, final double distance) {
                 //let's make a little noise
                 soundModule.playSound(IEmotionSoundModule.PURR_SOUND);
                 emotionModule.setTemporalEmotion(Emotion.LAUGHING, 15000, Emotion.NORMAL);
             }
 
             @Override
-            public void caress(TouchGestureDirection dir) {
+            public void caress(final TouchGestureDirection dir) {
 
             }
         };
@@ -119,12 +119,12 @@ public class ExampleBehaviourModule extends ABehaviourModule {
 
         //if needed you can change the default execution period of the runStep() code
         //by default it is 50 ms, and has a minimum allowed value of 10 ms
-        this.setPeriod(100); //100ms --> 10 times per second
+        setPeriod(100); //100ms --> 10 times per second
 
     }
 
     @Override
-    protected void stopBehaviour()  throws InternalErrorException{
+    protected void stopBehaviour() throws InternalErrorException {
 
         touchModule.unsuscribe(touchListener);
 
@@ -143,31 +143,83 @@ public class ExampleBehaviourModule extends ABehaviourModule {
         //below you can seen an example where we are checking the values of the IR sensors
         //and changing the face of the robot if there is an obstacle to close to the robot
 
-        int newState = 0; //normal by default
-        for(IRSensorStatus irSensor : robModule.getLastStatusIRs()) {
-            if (irSensor.getDistance() < 1000) {
-                newState = 1; //some obstacle is to close!
-            }
-        }
-
-        if (newState != this.state) { //state changed since last time
-
-            this.state = newState;
-
-            switch(state) {
+        final int newState = 0; //normal by default
+        count++;
+        try {
+            switch (state) {
                 case 0: //normal state
-                    this.emotionModule.setCurrentEmotion(Emotion.NORMAL);
-                    break;
-                case 1: //too close to obstacle
-                    this.soundModule.playSound(IEmotionSoundModule.ANGRY_SOUND);
-                    this.emotionModule.setCurrentEmotion(Emotion.ANGRY);
-                    break;
+                    emotionModule.setCurrentEmotion(Emotion.NORMAL);
 
+                    robModule.moveMT(40, 90, 40, 90);
+
+                    Log.d("ExampleBehaviourModule", count + " COUNT");
+                    if (count == 75) {
+                        state = 1;
+                        count = 0;
+                    }
+                    break;
+                case 1:
+                    soundModule.playSound(IEmotionSoundModule.ANGRY_SOUND);
+                    emotionModule.setCurrentEmotion(Emotion.ANGRY);
+
+                    robModule.moveMT(40, 90, 10, 90);
+                    Log.d("ExampleBehaviourModule", "STATE 1");
+
+                    if (finish) {
+                        state = 6;
+                    }
+                    if (count >= 15) {
+                        state = 2;
+                        count = 0;
+                    }
+                    break;
+                case 2:
+                    robModule.moveMT(0, 90, 0, 90);
+                    Log.d("ExampleBehaviourModule", "STATE 2");
+
+                    if (count == 2) {
+
+                        state = 3;
+                        count = 0;
+                    }
+                    break;
+                case 3:
+                    robModule.moveMT(40, 90, 40, 90);
+                    Log.d("ExampleBehaviourModule", "STATE 3");
+
+                    if (count == 16) {
+                        state = 4;
+                        count = 0;
+                    }
+                    break;
+                case 4:
+                    robModule.moveMT(40, 90, 5, 90);
+                    Log.d("ExampleBehaviourModule", "STATE 4");
+
+                    if (count >= 19) {
+                        finish = true;
+                        state = 5;
+                        count = 0;
+                    }
+                    break;
+                case 5:
+                    Log.d("ExampleBehaviourModule", "STATE 4");
+                    robModule.moveMT(70, 90, 70, 90);
+                    if (count == 55) {
+                        state = 6;
+                        count = 0;
+                    }
+
+                    break;
+                case 6:
+                    break;
             }
+        } catch (final CommunicationException e) {
+            e.printStackTrace();
         }
-
 
     }
+
 
     @Override
     public String getModuleInfo() {
