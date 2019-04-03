@@ -21,9 +21,8 @@
  ******************************************************************************/
 package robobo.example.com.roboboexample;
 
+import android.util.Log;
 import com.mytechia.commons.framework.exception.InternalErrorException;
-import com.mytechia.robobo.framework.IModule;
-import com.mytechia.robobo.framework.RoboboManager;
 import com.mytechia.robobo.framework.behaviour.ABehaviourModule;
 import com.mytechia.robobo.framework.hri.emotion.Emotion;
 import com.mytechia.robobo.framework.hri.emotion.IEmotionModule;
@@ -35,6 +34,7 @@ import com.mytechia.robobo.framework.hri.touch.TouchGestureDirection;
 import com.mytechia.robobo.rob.IRSensorStatus;
 import com.mytechia.robobo.rob.IRob;
 import com.mytechia.robobo.rob.IRobInterfaceModule;
+import com.mytechia.robobo.rob.movement.IRobMovementModule;
 
 /** Example of custom Robobo behaviour written in java and using the native Robobo Framework
  *
@@ -52,6 +52,7 @@ public class ExampleBehaviourModule extends ABehaviourModule {
 
     private IRob robModule = null;
     private IEmotionModule  emotionModule = null;
+    private IRobMovementModule  movementModule = null;
     private ITouchModule touchModule = null;
     private ISpeechProductionModule ttsModule = null;
     private IEmotionSoundModule soundModule = null;
@@ -67,6 +68,8 @@ public class ExampleBehaviourModule extends ABehaviourModule {
     protected void startBehaviour() throws InternalErrorException {
 
         robModule = getRobobo().getModuleInstance(IRobInterfaceModule.class).getRobInterface();
+
+        movementModule = getRobobo().getModuleInstance(IRobMovementModule.class);
 
         //the emotion module allows us to change the face of the robot
         emotionModule = getRobobo().getModuleInstance(IEmotionModule.class);
@@ -91,26 +94,50 @@ public class ExampleBehaviourModule extends ABehaviourModule {
         touchListener = new ITouchListener() {
             @Override
             public void tap(Integer x, Integer y) {
+
                 //let's complain a little bit
+                try {
+                    int i = 0;
+                    while (i++ < 1050) {
+                        robModule.moveMT(100, 100, 100, 100);
+                    }
+                    while(i++ < 1150) {
+                        robModule.moveMT(100,100, 0, 0);
+                    }
+                    while(i++ < 1550) {
+                        robModule.moveMT(100, 100, 100, 100);
+                    }
+                    while(i++ < 1700) {
+                        robModule.moveMT(100, 100, 0, 0);
+                    }
+                    while(i++ < 2700) {
+                        robModule.moveMT(100, 100, 100, 100);
+                    }
+//                    robModule.moveMT(0, 0, 100);
+                } catch (InternalErrorException e) {
+                    e.printStackTrace();
+                }
                 soundModule.playSound(IEmotionSoundModule.OUCH_SOUND);
                 emotionModule.setTemporalEmotion(Emotion.ANGRY, 1500, Emotion.NORMAL);
             }
 
             @Override
             public void touch(Integer x, Integer y) {
-
+                Log.d("Rafik", "touch: ");
             }
 
             @Override
             public void fling(TouchGestureDirection dir, double angle, long time, double distance) {
                 //let's make a little noise
+                Log.d("Rafik", "fling: ");
+
                 soundModule.playSound(IEmotionSoundModule.PURR_SOUND);
                 emotionModule.setTemporalEmotion(Emotion.LAUGHING, 15000, Emotion.NORMAL);
             }
 
             @Override
             public void caress(TouchGestureDirection dir) {
-
+                Log.d("Rafik", "caress: ");
             }
         };
 
