@@ -48,7 +48,7 @@ import com.mytechia.robobo.rob.IRobInterfaceModule;
  *
  * @author Gervasio Varela | gervasio.varela@mytechia.com
  */
-public class ExampleBehaviourModule extends ABehaviourModule {
+public class Parcours2 extends ABehaviourModule {
 
     private IRob robModule = null;
     private IEmotionModule emotionModule = null;
@@ -152,7 +152,7 @@ public class ExampleBehaviourModule extends ABehaviourModule {
 
                     robModule.moveMT(40, 90, 40, 90);
 
-                    Log.d("ExampleBehaviourModule", count + " COUNT");
+                    Log.d("Parcours1", count + " COUNT");
                     if (count == 75) {
                         state = 1;
                         count = 0;
@@ -163,7 +163,7 @@ public class ExampleBehaviourModule extends ABehaviourModule {
                     emotionModule.setCurrentEmotion(Emotion.ANGRY);
 
                     robModule.moveMT(40, 90, 10, 90);
-                    Log.d("ExampleBehaviourModule", "STATE 1");
+                    Log.d("Parcours2", "STATE 1");
 
                     if (finish) {
                         state = 6;
@@ -175,7 +175,7 @@ public class ExampleBehaviourModule extends ABehaviourModule {
                     break;
                 case 2:
                     robModule.moveMT(0, 90, 0, 90);
-                    Log.d("ExampleBehaviourModule", "STATE 2");
+                    Log.d("Parcours2", "STATE 2");
 
                     if (count == 2) {
 
@@ -185,7 +185,7 @@ public class ExampleBehaviourModule extends ABehaviourModule {
                     break;
                 case 3:
                     robModule.moveMT(40, 90, 40, 90);
-                    Log.d("ExampleBehaviourModule", "STATE 3");
+                    Log.d("Parcours2", "STATE 3");
 
                     if (count == 16) {
                         state = 4;
@@ -194,7 +194,7 @@ public class ExampleBehaviourModule extends ABehaviourModule {
                     break;
                 case 4:
                     robModule.moveMT(40, 90, 5, 90);
-                    Log.d("ExampleBehaviourModule", "STATE 4");
+                    Log.d("Parcours2", "STATE 4");
 
                     if (count >= 19) {
                         finish = true;
@@ -203,16 +203,66 @@ public class ExampleBehaviourModule extends ABehaviourModule {
                     }
                     break;
                 case 5:
-                    Log.d("ExampleBehaviourModule", "STATE 4");
-                    robModule.moveMT(70, 90, 70, 90);
-                    if (count == 55) {
+                    Log.d("Parcours2", "STATE 5");
+                    robModule.moveMT(40, 90, 40, 90);
+                    if (count == 20) {
                         state = 6;
                         count = 0;
                     }
-
                     break;
                 case 6:
+                    Log.d("Parcours2", "STATE 6");
+                    robModule.moveMT(40, 90, 10, 90);
+                    if (count == 20) {
+                        state = 7;
+                        count = 0;
+                    }
                     break;
+                case 7:
+                    Log.d("Parcours2", "STATE 7");
+                    robModule.moveMT(40, 90, 40, 90);
+                    if (count == 20) {
+                        state = 8;
+                        count = 0;
+                    }
+                    break;
+
+                case 8:
+                    Log.d("Parcours2", "STATE 8");
+                    robModule.moveMT(10, 90, 40, 90);
+                    if (count == 20) {
+                        state = 9;
+                        count = 0;
+                    }
+                    break;
+                case 9:
+                    Log.d("Parcours2", "STATE 9");
+                    robModule.moveMT(40, 90, 40, 90);
+                    if (count == 5) {
+                        state = 10;
+                        count = 0;
+                    }
+                    break;
+
+                case 10:
+                    Log.d("Parcours2", "STATE 10");
+                    robModule.moveMT(10, 90, 40, 90);
+                    if (count == 10) {
+                        state = 11;
+                        count = 0;
+                    }
+                    break;
+
+                case 11:
+                    Log.d("Parcours2", "STATE 11");
+                    robModule.moveMT(40, 90, 40, 90);
+                    if (count == 50) {
+                        state = 12;
+                        count = 0;
+                    }
+                    break;
+
+                    default: break;
             }
         } catch (final CommunicationException e) {
             e.printStackTrace();
