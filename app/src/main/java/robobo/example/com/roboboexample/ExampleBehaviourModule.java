@@ -21,6 +21,8 @@
  ******************************************************************************/
 package robobo.example.com.roboboexample;
 
+import android.util.Log;
+
 import com.mytechia.commons.framework.exception.InternalErrorException;
 import com.mytechia.robobo.framework.IModule;
 import com.mytechia.robobo.framework.RoboboManager;
@@ -35,6 +37,7 @@ import com.mytechia.robobo.framework.hri.touch.TouchGestureDirection;
 import com.mytechia.robobo.rob.IRSensorStatus;
 import com.mytechia.robobo.rob.IRob;
 import com.mytechia.robobo.rob.IRobInterfaceModule;
+import com.mytechia.robobo.rob.LEDsModeEnum;
 
 /** Example of custom Robobo behaviour written in java and using the native Robobo Framework
  *
@@ -96,6 +99,7 @@ public class ExampleBehaviourModule extends ABehaviourModule {
                 //let's complain a little bit
                 soundModule.playSound(IEmotionSoundModule.OUCH_SOUND);
                 emotionModule.setTemporalEmotion(Emotion.ANGRY, 1500, Emotion.NORMAL);
+                Etape02();
             }
 
             @Override
@@ -125,6 +129,48 @@ public class ExampleBehaviourModule extends ABehaviourModule {
 
     }
 
+    private void Etape01(){
+        BigStep();
+        TurnLeft();
+        SmallStep(1);
+        TurnLeft();
+        BigStep();
+    }
+
+    private void Etape02(){
+        BigStep();
+        TurnLeft();
+        SmallStep(3);
+        TurnLeft();
+        SmallStep(3);
+        TurnLeft();
+        SmallStep(3);
+        TurnRight();
+        SmallStep(1);
+        TurnRight();
+        SmallStep(1);
+        TurnLeft();
+        SmallStep(1);
+    }
+
+    private void BigStep(){
+        try { robModule.moveMT(50,50,7500); Thread.sleep(8000); }catch (Exception e){ }
+    }
+
+    private void SmallStep(int arg){
+        if(arg==1){  try { robModule.moveMT(50,50,2500); Thread.sleep(3000); }catch (Exception e){ } }
+        if(arg==2){  try { robModule.moveMT(50,50,3000); Thread.sleep(3500); }catch (Exception e){ } }
+        if(arg==3){  try { robModule.moveMT(50,50,2000); Thread.sleep(2500); }catch (Exception e){ } }
+    }
+
+    private void TurnRight(){
+        try { robModule.moveMT(0,16,3000); Thread.sleep(3500); }catch (Exception e){ }
+    }
+
+    private void TurnLeft(){
+        try { robModule.moveMT(13,0,3000); Thread.sleep(3500); }catch (Exception e){ }
+    }
+
     @Override
     protected void stopBehaviour()  throws InternalErrorException{
 
@@ -134,16 +180,6 @@ public class ExampleBehaviourModule extends ABehaviourModule {
 
     @Override
     protected void runStep() {
-
-
-//        Tour 1
-//        if(tmpEtat==1) Run_01();
-        Run_01();
-
-
-//        Tour 2
-//        if(tmpEtat==3) Run_02();
-//        Run_02();
 
         //as you can see in the documentation the majority of the Robobo framework works by
         //using listeners to events, the best place to setup the listeners is the startBehaviour()
@@ -180,125 +216,6 @@ public class ExampleBehaviourModule extends ABehaviourModule {
 
 
     }
-
-
-    private void Run_01(){
-
-        Compt ++;
-
-        try{
-//          Le 1 Er Tour
-
-            if(Compt < 3){
-
-                robModule.moveMT(200,200,3500);
-            }
-//          2
-            if(Compt > 30 && Compt < 32){
-
-                robModule.moveMT(100,25,800);
-            }
-//          3
-            if(Compt > 40 && Compt < 43){
-
-                robModule.moveMT(200,200,500);
-            }
-//          4
-            if(Compt > 50 && Compt < 52){
-
-                robModule.moveMT(100,25,800);
-            }
-//            5
-            if(Compt > 60 && Compt < 64){
-
-                robModule.moveMT(200,200,3300);
-            }
-
-
-        }catch (Exception e){
-
-        }
-    }
-
-    private void Run_02(){
-
-        Compt ++;
-
-        try{
-
-//            Commencer un autre tour en deux
-
-            if(Compt < 3){
-
-                robModule.moveMT(200,200,3500);
-            }
-//          2
-            if(Compt > 30 && Compt < 32){
-
-                robModule.moveMT(100,25,800);
-            }
-//          3
-            if(Compt > 40 && Compt < 43){
-
-                robModule.moveMT(200,200,500);
-            }
-//          4
-            if(Compt > 50 && Compt < 52){
-
-                robModule.moveMT(100,25,800);
-            }
-//            5
-            if(Compt > 60 && Compt < 64){
-
-                robModule.moveMT(200,200,500);
-            }
-//            14
-            if(Compt > 70 && Compt < 72){
-
-                robModule.moveMT(100,25,800);
-            }
-//            15
-            if(Compt > 80 && Compt < 83){
-
-                robModule.moveMT(200,200,800);
-            }
-//            16
-            if(Compt > 90 && Compt < 92){
-
-                robModule.moveMT(15,100,800);
-            }
-//            17
-            if(Compt > 100 && Compt < 103){
-
-                robModule.moveMT(200,200,500);
-            }
-//            18
-            if(Compt > 110 && Compt < 112){
-
-                robModule.moveMT(15,100,800);
-            }
-//            19
-            if(Compt > 125 && Compt < 130){
-
-                robModule.moveMT(200,200,2000);
-            }
-//            20
-            if(Compt > 140 && Compt < 143){
-
-                robModule.moveMT(100,30,800);
-            }
-//            21
-            if(Compt > 150 && Compt < 153){
-
-                robModule.moveMT(200,200,600);
-            }
-
-
-        }catch (Exception e){
-
-        }
-    }
-
 
     @Override
     public String getModuleInfo() {
