@@ -60,6 +60,8 @@ public class ExampleBehaviourModule extends ABehaviourModule {
 
     private int count = 0;
 
+    static int Compt = 1 ;
+
     private int state = 0; //0 --> normal | 1 --> too close!
 
 
@@ -133,6 +135,16 @@ public class ExampleBehaviourModule extends ABehaviourModule {
     @Override
     protected void runStep() {
 
+
+//        Tour 1
+//        if(tmpEtat==1) Run_01();
+        Run_01();
+
+
+//        Tour 2
+//        if(tmpEtat==3) Run_02();
+//        Run_02();
+
         //as you can see in the documentation the majority of the Robobo framework works by
         //using listeners to events, the best place to setup the listeners is the startBehaviour()
         //method
@@ -168,6 +180,125 @@ public class ExampleBehaviourModule extends ABehaviourModule {
 
 
     }
+
+
+    private void Run_01(){
+
+        Compt ++;
+
+        try{
+//          Le 1 Er Tour
+
+            if(Compt < 3){
+
+                robModule.moveMT(200,200,3500);
+            }
+//          2
+            if(Compt > 30 && Compt < 32){
+
+                robModule.moveMT(100,25,800);
+            }
+//          3
+            if(Compt > 40 && Compt < 43){
+
+                robModule.moveMT(200,200,500);
+            }
+//          4
+            if(Compt > 50 && Compt < 52){
+
+                robModule.moveMT(100,25,800);
+            }
+//            5
+            if(Compt > 60 && Compt < 64){
+
+                robModule.moveMT(200,200,3300);
+            }
+
+
+        }catch (Exception e){
+
+        }
+    }
+
+    private void Run_02(){
+
+        Compt ++;
+
+        try{
+
+//            Commencer un autre tour en deux
+
+            if(Compt < 3){
+
+                robModule.moveMT(200,200,3500);
+            }
+//          2
+            if(Compt > 30 && Compt < 32){
+
+                robModule.moveMT(100,25,800);
+            }
+//          3
+            if(Compt > 40 && Compt < 43){
+
+                robModule.moveMT(200,200,500);
+            }
+//          4
+            if(Compt > 50 && Compt < 52){
+
+                robModule.moveMT(100,25,800);
+            }
+//            5
+            if(Compt > 60 && Compt < 64){
+
+                robModule.moveMT(200,200,500);
+            }
+//            14
+            if(Compt > 70 && Compt < 72){
+
+                robModule.moveMT(100,25,800);
+            }
+//            15
+            if(Compt > 80 && Compt < 83){
+
+                robModule.moveMT(200,200,800);
+            }
+//            16
+            if(Compt > 90 && Compt < 92){
+
+                robModule.moveMT(15,100,800);
+            }
+//            17
+            if(Compt > 100 && Compt < 103){
+
+                robModule.moveMT(200,200,500);
+            }
+//            18
+            if(Compt > 110 && Compt < 112){
+
+                robModule.moveMT(15,100,800);
+            }
+//            19
+            if(Compt > 125 && Compt < 130){
+
+                robModule.moveMT(200,200,2000);
+            }
+//            20
+            if(Compt > 140 && Compt < 143){
+
+                robModule.moveMT(100,30,800);
+            }
+//            21
+            if(Compt > 150 && Compt < 153){
+
+                robModule.moveMT(200,200,600);
+            }
+
+
+        }catch (Exception e){
+
+        }
+    }
+
 
     @Override
     public String getModuleInfo() {
