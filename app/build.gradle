@@ -28,10 +28,14 @@ android {
         exclude 'lib/x86_64/*.so'
         exclude 'lib/armeabi/*.so'
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -52,20 +56,20 @@ dependencies {
         exclude group: 'ch.qos.logback', module: 'logback-classic'
         //changing true
     }
-    implementation ('com.mytechia:robobo-rob:1.1.2') {
+    implementation('com.mytechia:robobo-rob:1.1.2') {
         //changing true
     }
     implementation 'com.mytechia:robobo-sensing:1.0.1'
     implementation 'com.mytechia:robobo-sound:1.0.3'
     implementation 'com.mytechia:robobo-touch:1.0.0'
-    implementation ('com.mytechia:robobo-speech:1.0.0'){
+    implementation('com.mytechia:robobo-speech:1.0.0') {
         //changing true
     }
-    implementation('com.mytechia:robobo-emotion:1.0.1'){
+    implementation('com.mytechia:robobo-emotion:1.0.1') {
         changing true
     }
     implementation 'com.mytechia:robobo-remote-control:1.0.1'
-    implementation ('com.mytechia:robobo-vision:1.0.2'){
+    implementation('com.mytechia:robobo-vision:1.0.2') {
         //changing true
     }
     implementation 'com.mytechia:robobo-behaviours:1.0.4'

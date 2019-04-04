@@ -48,7 +48,7 @@ import com.mytechia.robobo.rob.IRobInterfaceModule;
  *
  * @author Gervasio Varela | gervasio.varela@mytechia.com
  */
-public class Parcours2 extends ABehaviourModule {
+public class StartRobo extends ABehaviourModule {
 
     private IRob robModule = null;
     private IEmotionModule emotionModule = null;
@@ -58,10 +58,19 @@ public class Parcours2 extends ABehaviourModule {
 
     private ITouchListener touchListener = null;
 
-    private int count = 0;
-
-    private int state = 0; //0 --> normal | 1 --> too close!
     boolean finish = false;
+    private static int count = 0;
+    private static int state = 0; //0 --> normal | 1 --> too close!
+    private static volatile int parcourChoisie = 0;
+    private static volatile int timing = 100;
+
+    public static void setUpdates(int timer, int choise) {
+        Log.d("eee", "setUpdates: >>>>>>>>>>>>>>>>>> setting " + timer + " " + choise);
+        timing = timer;
+        parcourChoisie = choise;
+        state = 0;
+        count = 0;
+    }
 
     @Override
     protected void startBehaviour() throws InternalErrorException {
@@ -93,7 +102,7 @@ public class Parcours2 extends ABehaviourModule {
                 //let's complain a little bit
                 soundModule.playSound(IEmotionSoundModule.OUCH_SOUND);
                 emotionModule.setTemporalEmotion(Emotion.ANGRY, 1500, Emotion.NORMAL);
-
+                setUpdates(100, 1);
             }
 
             @Override
@@ -110,7 +119,7 @@ public class Parcours2 extends ABehaviourModule {
 
             @Override
             public void caress(final TouchGestureDirection dir) {
-
+                setUpdates(100, 2);
             }
         };
 
@@ -142,17 +151,19 @@ public class Parcours2 extends ABehaviourModule {
 
         //below you can seen an example where we are checking the values of the IR sensors
         //and changing the face of the robot if there is an obstacle to close to the robot
-
-        final int newState = 0; //normal by default
-        count++;
         try {
+        if (parcourChoisie == 0) {
+            Log.d("runStep", "runStep: >>>>>>>>>>>>> 0");
+            return;
+        } else if (parcourChoisie == 1) {
+            count++;
             switch (state) {
                 case 0: //normal state
                     emotionModule.setCurrentEmotion(Emotion.NORMAL);
 
                     robModule.moveMT(40, 90, 40, 90);
 
-                    Log.d("Parcours1", count + " COUNT");
+                    Log.d("StartRobo", count + " COUNT");
                     if (count == 75) {
                         state = 1;
                         count = 0;
@@ -163,7 +174,7 @@ public class Parcours2 extends ABehaviourModule {
                     emotionModule.setCurrentEmotion(Emotion.ANGRY);
 
                     robModule.moveMT(40, 90, 10, 90);
-                    Log.d("Parcours2", "STATE 1");
+                    Log.d("StartRobo", "STATE 1");
 
                     if (finish) {
                         state = 6;
@@ -175,7 +186,7 @@ public class Parcours2 extends ABehaviourModule {
                     break;
                 case 2:
                     robModule.moveMT(0, 90, 0, 90);
-                    Log.d("Parcours2", "STATE 2");
+                    Log.d("StartRobo", "STATE 2");
 
                     if (count == 2) {
 
@@ -185,7 +196,7 @@ public class Parcours2 extends ABehaviourModule {
                     break;
                 case 3:
                     robModule.moveMT(40, 90, 40, 90);
-                    Log.d("Parcours2", "STATE 3");
+                    Log.d("StartRobo", "STATE 3");
 
                     if (count == 16) {
                         state = 4;
@@ -194,7 +205,7 @@ public class Parcours2 extends ABehaviourModule {
                     break;
                 case 4:
                     robModule.moveMT(40, 90, 5, 90);
-                    Log.d("Parcours2", "STATE 4");
+                    Log.d("StartRobo", "STATE 4");
 
                     if (count >= 19) {
                         finish = true;
@@ -203,67 +214,138 @@ public class Parcours2 extends ABehaviourModule {
                     }
                     break;
                 case 5:
-                    Log.d("Parcours2", "STATE 5");
-                    robModule.moveMT(40, 90, 40, 90);
-                    if (count == 20) {
+                    Log.d("StartRobo", "STATE 4");
+                    robModule.moveMT(70, 90, 70, 90);
+                    if (count == 55) {
                         state = 6;
                         count = 0;
                     }
+
                     break;
                 case 6:
-                    Log.d("Parcours2", "STATE 6");
-                    robModule.moveMT(40, 90, 10, 90);
-                    if (count == 20) {
-                        state = 7;
-                        count = 0;
-                    }
                     break;
-                case 7:
-                    Log.d("Parcours2", "STATE 7");
-                    robModule.moveMT(40, 90, 40, 90);
-                    if (count == 20) {
-                        state = 8;
-                        count = 0;
-                    }
-                    break;
+            }
+        } else if (parcourChoisie == 2) {
+            count++;
+                switch (state) {
+                    case 0: //normal state
+                        emotionModule.setCurrentEmotion(Emotion.NORMAL);
 
-                case 8:
-                    Log.d("Parcours2", "STATE 8");
-                    robModule.moveMT(10, 90, 40, 90);
-                    if (count == 20) {
-                        state = 9;
-                        count = 0;
-                    }
-                    break;
-                case 9:
-                    Log.d("Parcours2", "STATE 9");
-                    robModule.moveMT(40, 90, 40, 90);
-                    if (count == 5) {
-                        state = 10;
-                        count = 0;
-                    }
-                    break;
+                        robModule.moveMT(40, 90, 40, 90);
 
-                case 10:
-                    Log.d("Parcours2", "STATE 10");
-                    robModule.moveMT(10, 90, 40, 90);
-                    if (count == 10) {
-                        state = 11;
-                        count = 0;
-                    }
-                    break;
+                        Log.d("Parcours2", count + " COUNT");
+                        if (count == 75) {
+                            state = 1;
+                            count = 0;
+                        }
+                        break;
+                    case 1:
+                        soundModule.playSound(IEmotionSoundModule.ANGRY_SOUND);
+                        emotionModule.setCurrentEmotion(Emotion.ANGRY);
 
-                case 11:
-                    Log.d("Parcours2", "STATE 11");
-                    robModule.moveMT(40, 90, 40, 90);
-                    if (count == 50) {
-                        state = 12;
-                        count = 0;
-                    }
-                    break;
+                        robModule.moveMT(40, 90, 10, 90);
+                        Log.d("Parcours2", "STATE 1");
+
+                        if (finish) {
+                            state = 6;
+                        }
+                        if (count >= 15) {
+                            state = 2;
+                            count = 0;
+                        }
+                        break;
+                    case 2:
+                        robModule.moveMT(0, 90, 0, 90);
+                        Log.d("Parcours2", "STATE 2");
+
+                        if (count == 2) {
+
+                            state = 3;
+                            count = 0;
+                        }
+                        break;
+                    case 3:
+                        robModule.moveMT(40, 90, 40, 90);
+                        Log.d("Parcours2", "STATE 3");
+
+                        if (count == 16) {
+                            state = 4;
+                            count = 0;
+                        }
+                        break;
+                    case 4:
+                        robModule.moveMT(40, 90, 5, 90);
+                        Log.d("Parcours2", "STATE 4");
+
+                        if (count >= 19) {
+                            finish = true;
+                            state = 5;
+                            count = 0;
+                        }
+                        break;
+                    case 5:
+                        Log.d("Parcours2", "STATE 5");
+                        robModule.moveMT(40, 90, 40, 90);
+                        if (count == 20) {
+                            state = 6;
+                            count = 0;
+                        }
+                        break;
+                    case 6:
+                        Log.d("Parcours2", "STATE 6");
+                        robModule.moveMT(40, 90, 10, 90);
+                        if (count == 20) {
+                            state = 7;
+                            count = 0;
+                        }
+                        break;
+                    case 7:
+                        Log.d("Parcours2", "STATE 7");
+                        robModule.moveMT(40, 90, 40, 90);
+                        if (count == 20) {
+                            state = 8;
+                            count = 0;
+                        }
+                        break;
+
+                    case 8:
+                        Log.d("Parcours2", "STATE 8");
+                        robModule.moveMT(10, 90, 40, 90);
+                        if (count == 20) {
+                            state = 9;
+                            count = 0;
+                        }
+                        break;
+                    case 9:
+                        Log.d("Parcours2", "STATE 9");
+                        robModule.moveMT(40, 90, 40, 90);
+                        if (count == 5) {
+                            state = 10;
+                            count = 0;
+                        }
+                        break;
+
+                    case 10:
+                        Log.d("Parcours2", "STATE 10");
+                        robModule.moveMT(10, 90, 40, 90);
+                        if (count == 10) {
+                            state = 11;
+                            count = 0;
+                        }
+                        break;
+
+                    case 11:
+                        Log.d("Parcours2", "STATE 11");
+                        robModule.moveMT(40, 90, 40, 90);
+                        if (count == 50) {
+                            state = 12;
+                            count = 0;
+                        }
+                        break;
 
                     default: break;
-            }
+                }
+        }
         } catch (final CommunicationException e) {
             e.printStackTrace();
         }
