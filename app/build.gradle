@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "robobo.example.com.Tour01"
+        applicationId "robobo.example.com.Tour02"
         minSdkVersion 22
         targetSdkVersion 25
         versionCode 1

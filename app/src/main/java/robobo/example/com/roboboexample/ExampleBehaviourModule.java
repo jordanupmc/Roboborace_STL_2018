@@ -21,6 +21,7 @@
  ******************************************************************************/
 package robobo.example.com.roboboexample;
 
+import android.app.ActionBar;
 import android.util.Log;
 
 import com.mytechia.commons.framework.exception.InternalErrorException;
@@ -164,7 +165,7 @@ public class ExampleBehaviourModule extends ABehaviourModule {
     }
 
     private void TurnRight(){
-        try { robModule.moveMT(0,16,3000); Thread.sleep(3500); }catch (Exception e){ }
+        try { robModule.moveMT(0,14,3000); Thread.sleep(3500); }catch (Exception e){ }
     }
 
     private void TurnLeft(){
@@ -178,8 +179,10 @@ public class ExampleBehaviourModule extends ABehaviourModule {
 
     }
 
+    private  static  int  tmpstat = 0 ;
     @Override
     protected void runStep() {
+
 
         //as you can see in the documentation the majority of the Robobo framework works by
         //using listeners to events, the best place to setup the listeners is the startBehaviour()
@@ -195,7 +198,13 @@ public class ExampleBehaviourModule extends ABehaviourModule {
         for(IRSensorStatus irSensor : robModule.getLastStatusIRs()) {
             if (irSensor.getDistance() < 1000) {
                 newState = 1; //some obstacle is to close!
+            tmpstat++;
+            Art();
             }
+//            if(irSensor.getDistance()<100){
+//                tmp = 1;
+//            }
+
         }
 
         if (newState != this.state) { //state changed since last time
@@ -215,6 +224,21 @@ public class ExampleBehaviourModule extends ABehaviourModule {
         }
 
 
+    }
+
+    private void Mar(){
+        try {
+            robModule.moveMT(50,50,10000);
+        }catch (Exception e){
+
+        }
+    }
+    private void Art(){
+        try {
+            robModule.moveMT(0,0,1000);
+        }catch (Exception e){
+
+        }
     }
 
     @Override
