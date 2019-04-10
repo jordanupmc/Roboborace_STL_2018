@@ -63,6 +63,7 @@ public class StartRobo extends ABehaviourModule {
     private static int state = 0; //0 --> normal | 1 --> too close!
     private static volatile int parcourChoisie = 0;
     private static volatile int timing = 100;
+    private volatile boolean parcourOneFinish = false;
 
     public static void setUpdates(int timer, int choise) {
         Log.d("eee", "setUpdates: >>>>>>>>>>>>>>>>>> setting " + timer + " " + choise);
@@ -102,7 +103,10 @@ public class StartRobo extends ABehaviourModule {
                 //let's complain a little bit
                 soundModule.playSound(IEmotionSoundModule.OUCH_SOUND);
                 emotionModule.setTemporalEmotion(Emotion.ANGRY, 1500, Emotion.NORMAL);
-                setUpdates(100, 1);
+                if (!parcourOneFinish) {
+                    parcourOneFinish = true;
+                    setUpdates(100, 1);
+                }
             }
 
             @Override
@@ -119,7 +123,10 @@ public class StartRobo extends ABehaviourModule {
 
             @Override
             public void caress(final TouchGestureDirection dir) {
-                setUpdates(100, 2);
+                if (!parcourOneFinish) {
+                    parcourOneFinish = true;
+                    setUpdates(100, 2);
+                }
             }
         };
 
@@ -163,7 +170,7 @@ public class StartRobo extends ABehaviourModule {
 
                     robModule.moveMT(40, 90, 40, 90);
 
-                    Log.d("StartRobo", count + " COUNT");
+                    Log.d("Parcours1", count + " COUNT");
                     if (count == 75) {
                         state = 1;
                         count = 0;
@@ -174,7 +181,7 @@ public class StartRobo extends ABehaviourModule {
                     emotionModule.setCurrentEmotion(Emotion.ANGRY);
 
                     robModule.moveMT(40, 90, 10, 90);
-                    Log.d("StartRobo", "STATE 1");
+                    Log.d("Parcours1", "STATE 1");
 
                     if (finish) {
                         state = 6;
@@ -186,7 +193,7 @@ public class StartRobo extends ABehaviourModule {
                     break;
                 case 2:
                     robModule.moveMT(0, 90, 0, 90);
-                    Log.d("StartRobo", "STATE 2");
+                    Log.d("Parcours1", "STATE 2");
 
                     if (count == 2) {
 
@@ -196,7 +203,7 @@ public class StartRobo extends ABehaviourModule {
                     break;
                 case 3:
                     robModule.moveMT(40, 90, 40, 90);
-                    Log.d("StartRobo", "STATE 3");
+                    Log.d("Parcours1", "STATE 3");
 
                     if (count == 16) {
                         state = 4;
@@ -205,7 +212,7 @@ public class StartRobo extends ABehaviourModule {
                     break;
                 case 4:
                     robModule.moveMT(40, 90, 5, 90);
-                    Log.d("StartRobo", "STATE 4");
+                    Log.d("Parcours1", "STATE 4");
 
                     if (count >= 19) {
                         finish = true;
@@ -214,7 +221,7 @@ public class StartRobo extends ABehaviourModule {
                     }
                     break;
                 case 5:
-                    Log.d("StartRobo", "STATE 4");
+                    Log.d("Parcours1", "STATE 5");
                     robModule.moveMT(70, 90, 70, 90);
                     if (count == 55) {
                         state = 6;
@@ -223,6 +230,7 @@ public class StartRobo extends ABehaviourModule {
 
                     break;
                 case 6:
+                    parcourOneFinish = false;
                     break;
             }
         } else if (parcourChoisie == 2) {
@@ -341,6 +349,9 @@ public class StartRobo extends ABehaviourModule {
                             state = 12;
                             count = 0;
                         }
+                        break;
+                    case 12 :
+                        parcourOneFinish = false;
                         break;
 
                     default: break;
